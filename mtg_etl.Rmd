@@ -38,16 +38,22 @@ auth.header <- paste("Authorization: bearer",bearer)
 ```
 
 
-get possible categories (using curl)
+set tcg GET curl handle
 ```{r}
 require(curl)
 
 h <- new_handle()
-handle_setheaders(h,"Authorization" = paste("bearer",bearer))
+handle_setheaders(h,"Authorization" = paste("bearer",bearer),"")
+```
 
-categories <- curl_fetch_memory("https://api.tcgplayer.com/catalog/categories", handle = h)
-str(categories)
+get categories table, turn it into a readable format
 
-categories$content
+```{r}
+categories <- curl_fetch_memory("https://api.tcgplayer.com/catalog/categories?limit=1000", handle = h)
+
+char.categories <- rawToChar(categories$content)
+categories.data <- fromJSON(char.categories)
+categories.data
 
 ```
+
