@@ -17,8 +17,31 @@ require(jsonlite)
 require(tidyverse)
 ```
  
-establish header with login credentials
+establish authentication crendentials
+```{r}
+user <- Sys.getenv("TCG_PUBLIC")
+key <- Sys.getenv("TCG_PRIVATE")
+body = paste("grant_type=client_credentials&client_id=",user,"&client_secret=",key,sep="")
+
+token <- httr::POST(url = "https://api.tcgplayer.com/token",
+           body = body,
+           httr::add_headers("application/x-www-form-urlencoded"))
+
+token.content <- httr::content(token)
+token <- token.content[1]
+bearer <- toString(token)
+
+token.content
+
+auth.header <- paste("Authorization: bearer",bearer)
 
 ```
 
+get possible categories
+
+```{r}
+categories <- httr::GET(url = "https://api.tcgplayer.com/catalog/groups",
+                        httr::add_headers(auth.header))
+categories.content
 ```
+
