@@ -1,0 +1,24 @@
+---
+title: "mtgetl"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Get data from MTG API
+
+Require necessary packages
+
+```{r}
+require(httr)
+require(jsonlite)
+require(tidyverse)
+```
+ 
+establish header with login credentials
+
+```
+
+```
