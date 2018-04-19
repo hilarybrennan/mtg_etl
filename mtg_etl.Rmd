@@ -12,9 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 Require necessary packages
 
 ```{r}
-require(httr)
 require(jsonlite)
 require(tidyverse)
+require(curl)
 ```
  
 establish authentication crendentials
@@ -40,8 +40,6 @@ auth.header <- paste("Authorization: bearer",bearer)
 
 set tcg GET curl handle
 ```{r}
-require(curl)
-
 h <- new_handle()
 handle_setheaders(h,"Authorization" = paste("bearer",bearer),"")
 ```
