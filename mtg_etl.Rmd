@@ -44,14 +44,23 @@ h <- new_handle()
 handle_setheaders(h,"Authorization" = paste("bearer",bearer),"")
 ```
 
-get categories table, turn it into a readable format
+get categories table, turn it into a tibble 
 
 ```{r}
 categories <- curl_fetch_memory("https://api.tcgplayer.com/catalog/categories?limit=1000", handle = h)
 
 char.categories <- rawToChar(categories$content)
-categories.data <- fromJSON(char.categories)
-categories.data
+categories.data <- fromJSON(char.categories, simplifyDataFrame = TRUE, flatten = FALSE)
+categories.tibble <- as_tibble(categories.data[[3]])
+
 
 ```
 
+Get a list of category IDs that are related to MTG
+```{r}
+magicids <- select(categories.tibble, categoryId, displayName)
+magicids  <- filter(magicids, displayName == "Magic: The Gathering")[,0, drop=TRUE]
+
+```
+
+Great! Now we have a list of category IDs that are related to MTG - let's use those values to get the rest of the data we want. 
