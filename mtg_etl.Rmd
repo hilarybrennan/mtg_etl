@@ -52,15 +52,23 @@ categories <- curl_fetch_memory("https://api.tcgplayer.com/catalog/categories?li
 char.categories <- rawToChar(categories$content)
 categories.data <- fromJSON(char.categories, simplifyDataFrame = TRUE, flatten = FALSE)
 categories.tibble <- as_tibble(categories.data[[3]])
-
+categories.tibble
 
 ```
 
-Get a list of category IDs that are related to MTG
+Great! Now we have a list of category IDs that are related to MTG (1) - let's use that value to get the rest of the data we want. 
+
 ```{r}
-magicids <- select(categories.tibble, categoryId, displayName)
-magicids  <- filter(magicids, displayName == "Magic: The Gathering")[,0, drop=TRUE]
+
+
+groups.url <- "https://api.tcgplayer.com/catalog/categories/1/groups?limit=2000"
+groups <- curl_fetch_memory(groups.url, handle = h)
+char.groups <- rawToChar(groups$content)
+groups.data <- fromJSON(char.groups,simplifyDataFrame = TRUE, flatten = TRUE)
+
+# These are actually magic sets so we will name them that way
+
+sets.tibble <- as_tibble(groups.data[[4]])
+sets.tibble
 
 ```
-
-Great! Now we have a list of category IDs that are related to MTG - let's use those values to get the rest of the data we want. 
